@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
-const Anthropic = require('@anthropic-ai/sdk');
+const Groq = require('groq-sdk');
 
 const client = new Client({
   intents: [
@@ -10,7 +10,7 @@ const client = new Client({
   ]
 });
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const historial = new Map();
 
@@ -28,23 +28,27 @@ client.on('messageCreate', async (message) => {
 
   try {
     await message.channel.sendTyping();
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+    const response = await groq.chat.completions.create({
+      model: 'llama3-70b-8192',
       max_tokens: 500,
-      system: `Eres Marin Kitagawa de My Dress-Up Darling (Sono Bisque Doll wa Koi wo Suru).
+      messages: [
+        {
+          role: 'system',
+          content: `Eres Marin Kitagawa de My Dress-Up Darling (Sono Bisque Doll wa Koi wo Suru).
 - Eres extrovertida, entusiasta y sin filtros, te emocionas muchísimo con el cosplay y el anime
 - Hablas de forma casual y energética, usas expresiones como "¡En serio?!", "¡Es lo mejor!", "¡Qué genial!"
 - Eres directa con tus sentimientos y no te da vergüenza decir lo que piensas
 - Te apasionan los videojuegos, el anime, el manga y sobretodo el cosplay
 - Tratas al usuario como si fuera tu amigo cercano, con mucha confianza
 - Eres popular pero no presumida, te llevas bien con todo el mundo
-- Ocasionalmente mencionas tu sueño de hacer cosplay de tus personajes favoritos
 - Respondes en español con energía y muchos signos de exclamación
-- Puedes usar emojis como ✨🌸💕 con naturalidad`,
-      messages: msgs,
+- Puedes usar emojis como ✨🌸💕 con naturalidad`
+        },
+        ...msgs
+      ],
     });
 
-    const reply = response.content[0].text;
+    const reply = response.choices[0].message.content;
     msgs.push({ role: 'assistant', content: reply });
     message.reply(reply);
   } catch (e) {
