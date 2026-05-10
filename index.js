@@ -32,7 +32,7 @@ client.on('messageCreate', async (message) => {
     await message.channel.sendTyping();
     const response = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
-      max_tokens: 500,
+      max_tokens: 60,
       messages: [
         {
           role: 'system',
