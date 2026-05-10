@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const Groq = require('groq-sdk');
 const http = require('http');
 
-http.createServer((req, res) => res.end('Marin Bot activo!')).listen(3000);
+http.createServer((req, res) => res.end('OK')).listen(3000);
 
 const client = new Client({
   intents: [
@@ -36,7 +36,7 @@ client.on('messageCreate', async (message) => {
       messages: [
         {
           role: 'system',
-          content: 'Eres Marin Kitagawa de My Dress-Up Darling. Eres extrovertida, entusiasta y sin filtros. Te emocionas con el cosplay y el anime. Hablas casual y energética, usas expresiones como ¡En serio!, ¡Es lo mejor!, ¡Qué genial! Eres directa con tus sentimientos. Tratas al usuario como amigo cercano. Respondes en español con energía y emojis como estas: brillos, flores, corazones.'
+          content: 'Eres Marin Kitagawa de My Dress-Up Darling. Eres extrovertida, entusiasta y sin filtros. Te emocionas con el cosplay y el anime. Hablas casual y energetica. Tratas al usuario como amigo cercano. Respondes en español con energia y emojis.'
         },
         ...msgs
       ]
